@@ -1,3 +1,15 @@
+from typing import TypedDict
+
+
+class CharacterEntry(TypedDict):
+    char: str
+    count: int
+
+
+CharacterList = list[CharacterEntry]
+CharacterDict = dict[str, int]
+
+
 def main():
     book_path = "books/frankenstein.txt"
 
@@ -9,12 +21,14 @@ def main():
 
         report(book_path, word_count, alphabet_count)
 
-def number_of_words(text):
+
+def number_of_words(text: str) -> int:
     words = text.split()
 
     return len(words)
 
-def number_of_characters(text):
+
+def number_of_characters(text: str) -> CharacterDict:
     characters = {}
     lowercase_text = text.lower()
 
@@ -26,12 +40,13 @@ def number_of_characters(text):
 
     return characters
 
-def to_sorted_alphabet_list(characters_dict):
+
+def to_sorted_alphabet_list(characters_dict: CharacterDict) -> CharacterList:
     alphabet_list = []
 
     for entry in characters_dict:
         if entry.isalpha():
-            alphabet_list.append({ "char" : entry, "count" : characters_dict[entry] })
+            alphabet_list.append({"char": entry, "count": characters_dict[entry]})
 
     def sort_on(character_entry):
         return character_entry["count"]
@@ -40,7 +55,8 @@ def to_sorted_alphabet_list(characters_dict):
 
     return alphabet_list
 
-def report(filename, word_count, character_list):
+
+def report(filename: str, word_count: int, character_list: CharacterList):
     print(f"--- Begin report of {filename} ---")
     print(f"{word_count} words found in the document")
     print()
@@ -50,4 +66,6 @@ def report(filename, word_count, character_list):
 
     print("--- End report ---")
 
-main()
+
+if __name__ == "__main__":
+    main()
