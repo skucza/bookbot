@@ -16,10 +16,10 @@ def main():
     with open(book_path, "r") as file:
         file_contents = file.read()
         word_count = number_of_words(file_contents)
-        char_dictionary = number_of_characters(file_contents)
-        alphabet_count = to_sorted_alphabet_list(char_dictionary)
+        char_dictionary = character_occurrence(file_contents)
+        characters_ranking = alphabet_character_ranking(char_dictionary)
 
-        report(book_path, word_count, alphabet_count)
+        report(book_path, word_count, characters_ranking)
 
 
 def number_of_words(text: str) -> int:
@@ -28,8 +28,8 @@ def number_of_words(text: str) -> int:
     return len(words)
 
 
-def number_of_characters(text: str) -> CharacterDict:
-    characters = {}
+def character_occurrence(text: str) -> CharacterDict:
+    characters: CharacterDict = {}
     lowercase_text = text.lower()
 
     for character in lowercase_text:
@@ -41,14 +41,14 @@ def number_of_characters(text: str) -> CharacterDict:
     return characters
 
 
-def to_sorted_alphabet_list(characters_dict: CharacterDict) -> CharacterList:
-    alphabet_list = []
+def alphabet_character_ranking(character_dict: CharacterDict) -> CharacterList:
+    alphabet_list: CharacterList = []
 
-    for entry in characters_dict:
+    for entry in character_dict:
         if entry.isalpha():
-            alphabet_list.append({"char": entry, "count": characters_dict[entry]})
+            alphabet_list.append({"char": entry, "count": character_dict[entry]})
 
-    def sort_on(character_entry):
+    def sort_on(character_entry: CharacterEntry):
         return character_entry["count"]
 
     alphabet_list.sort(reverse=True, key=sort_on)
