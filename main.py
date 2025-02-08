@@ -16,8 +16,8 @@ def main():
     with open(book_path, "r") as file:
         file_contents = file.read()
         word_count = number_of_words(file_contents)
-        char_dictionary = character_occurrence(file_contents)
-        characters_ranking = alphabet_character_ranking(char_dictionary)
+        char_occurrence = character_occurrence(file_contents)
+        characters_ranking = alphabet_character_ranking(char_occurrence)
 
         report(book_path, word_count, characters_ranking)
 
@@ -30,28 +30,20 @@ def number_of_words(text: str) -> int:
 
 def character_occurrence(text: str) -> CharacterDict:
     characters: CharacterDict = {}
-    lowercase_text = text.lower()
 
-    for character in lowercase_text:
-        if character in characters:
-            characters[character] += 1
-        else:
-            characters[character] = 1
+    for character in text.lower():
+        characters[character] = characters.get(character, 0) + 1
 
     return characters
 
 
-def alphabet_character_ranking(character_dict: CharacterDict) -> CharacterList:
-    alphabet_list: CharacterList = []
+def alphabet_character_ranking(char_occurrence: CharacterDict) -> CharacterList:
+    alphabet_list: CharacterList = [
+        {"char": char, "count": count}
+        for char, count in char_occurrence.items() if char.isalpha()
+    ]
 
-    for entry in character_dict:
-        if entry.isalpha():
-            alphabet_list.append({"char": entry, "count": character_dict[entry]})
-
-    def sort_on(character_entry: CharacterEntry):
-        return character_entry["count"]
-
-    alphabet_list.sort(reverse=True, key=sort_on)
+    alphabet_list.sort(reverse=True, key=lambda entry: entry["count"])
 
     return alphabet_list
 
